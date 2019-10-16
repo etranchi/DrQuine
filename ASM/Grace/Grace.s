@@ -5,7 +5,7 @@ section .data
 	fread:	db"w", 0
 	str:db";Salut Grace%2$c", 0
 %endmacro
-%macro MAIN 0
+%macrot MAIN 0
 _main:
 	call _toto
 	ret

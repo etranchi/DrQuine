@@ -1,4 +1,4 @@
-NAME=Colleen
+NAME=Sully
 
 S_FILES = $(NAME).c
 CC			= 	gcc
@@ -11,11 +11,11 @@ $(NAME):
 	$(CC) $(CFLAGS) -o $(NAME) $(S_FILES)
 
 clean:
-	@echo "Nothing to be done."
+	rm -f $(NAME)_*.c
 
 fclean: clean
-	@rm -f $(NAME)
-	@echo $(NAME) Deleted.
+	@rm -f $(NAME) $(NAME)_*
+	@echo $(NAME)s Deleted.
 
 re: fclean all
 

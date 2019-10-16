@@ -6,18 +6,21 @@ section .data
 	str:db";Salut Grace%2$c", 0
 %endmacro
 %macro MAIN 0
+_main:
+	call _toto
+	ret
+%endmacro
 
 DATA
 
 section .text
-	global _start
+	global _toto
 	extern _fopen
 	extern _fprintf
 
-_start:
-	call _main
-	ret
-_main:
+
+
+_toto:
 	push rbp
 	mov rbp, rsp
 	lea rdi, [rel fname]
@@ -38,4 +41,4 @@ fin:
 	pop rbp
 	ret
 
-%endmacro MAIN
+MAIN

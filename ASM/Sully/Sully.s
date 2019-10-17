@@ -67,8 +67,8 @@ _main:
 
 
 	lea rdi, [rel nasmcmd]
-	lea rsi, [rel ldcmdf]
-	call _strcat ; BUUUUGGG want nasmcmd = "nasm -f macho64 Sully_5.s & ld "
+	mov rsi, ldcmdf
+	call _strcat; BUUUUGGG want nasmcmd = "nasm -f macho64 Sully_5.s & ld "
 				; mais jai nasm -f macho64 Sully_5.sully_5.s
 
 	;mov rdi, rax

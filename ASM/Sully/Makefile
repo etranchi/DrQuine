@@ -6,7 +6,7 @@ NASM = nasm -f macho64
 all: $(NAME)
 
 $(NAME): $(O_FILES)
-	ld $< -o $@ -macosx_version_min 10.11 -lSystem
+	ld  $< -o $@ -macosx_version_min 10.11 -lSystem
 
 $(O_FILES): %.o:%.s
 	$(NASM) $< -o $@
@@ -15,7 +15,7 @@ clean:
 	@rm -rf $(O_FILES)
 
 fclean: clean
-	@rm -f $(NAME) $(NAME)_*.s 
+	@rm -f $(NAME) $(NAME)_* 
 	@echo $(NAME) Deleted.
 
 re: fclean all

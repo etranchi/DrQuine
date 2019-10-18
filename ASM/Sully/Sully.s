@@ -4,84 +4,153 @@ section .data
 	fint: db"5", 0
 	iden:db "%s", 10, 0
 	fwrite:db"w", 0
-	str:db"section .data", 10, 0
+	str:db"section .data", 10, "section .text",10, "global _main", 10, "_main:", 10,"ret",10, 0
 	nasmcmd:db"nasm -f macho64 ", 0
-	ldcmdf:db"& ld ", 0
+	ldcmdf:db" & ld ", 0
 	ldcmds:db".o -o ", 0
 	ldcmdt:db" -macosx_version_min 10.11 -lSystem", 0
+	runit:db"./",0
 
 section .bss
-	tmp: resq 10000
+	buffer: resw 100
+	cmd: resw 100
+	run: resw 100
 
 section .text
 	global _main
 	extern _system
 	extern _strcat
+	extern _strncat
 	extern _strcpy
 	extern _execl
 	extern _fopen
+	extern _fclose
 	extern _fprintf
 	extern _sprintf
 	extern _printf
 	extern _atoi
+
 _main:
 	push rbp
 	mov rbp, rsp
 
-	lea rdi, [rel fint]
+	mov rdi, fint
 	call _atoi
 	cmp rax, 0
 	je end
 
-	mov r8, rax
+	mov rdi, buffer
+	mov rsi, fname
+	call _strcat ; buffer = Sully_
 
-	lea rdi, [rel tmp]
-	lea rsi, [rel fname] 
-	call _strcpy ;tmp = "Sully_"
-
-	lea rdi, [rel tmp]
-	lea rsi, [rel fint]
-	call _strcat ;tmp = "Sully_5"
-
-	mov r10, tmp ; Sully_int STOCK
-
-	lea rdi, [rel tmp]
-	lea rsi, [rel fext] 
-	call _strcat ;tmp = "Sully_5.s"
-
-	lea rdi, [rel tmp]
-	lea rsi, [rel fwrite]
-	call _fopen ; 
-
-	mov r9, rax ; fd
-
-	mov rdi, r9
-	lea rsi, [rel str]
-	lea rdx, [rel str]
-	call _fprintf ; printf str in fd
+	mov rdi, buffer
+	mov rsi, fint
+	call _strcat ; buffer = Sully_5.s
 
 
-	lea rdi, [rel nasmcmd]
-	lea rsi, [rel tmp]
-	call _strcat ; nasmcmd = "nasm -f macho64 Sully_5.s"
+	mov rdi, cmd
+	mov rsi, nasmcmd
+	call _strcat ; cmd = nasm -f macho64 
 
 
-	lea rdi, [rel nasmcmd]
-	lea rsi, [rel ldcmdf]
-	call _strcat; BUUUUGGG want nasmcmd = "nasm -f macho64 Sully_5.s & ld "
-				; mais jai nasm -f macho64 Sully_5.sully_5.s
+	mov rdi, buffer
+	mov rsi, fext
+	call _strcat ; buffer = Sully_5.s
 
-	;mov rdi, rax
-	;call _system
+	mov rdi, cmd
+	mov rsi, buffer
+	call _strcat ; cmd = nasm -f macho64 Sully_5.s
+
+	mov rdi, cmd
+	mov rsi, ldcmdf
+	call _strcat ; cmd = nasm -f macho64 Sully_5.s & ld
+
+	mov rdi, cmd
+	mov rsi, buffer
+	mov rdx, 7
+	call _strncat ; cmd = nasm -f macho64 Sully_5.s & ld Sully_5
+
+	mov rdi, cmd
+	mov rsi, ldcmds
+	call _strcat ; cmd = nasm -f macho64 Sully_5.s & ld Sully_5.o -o
+
+	mov rdi, cmd
+	mov rsi, buffer
+	mov rdx, 7
+	call _strncat ; cmd = nasm -f macho64 Sully_5.s & ld Sully_5.o -o Sully_5
+
+	mov rdi, cmd
+	mov rsi, ldcmdt
+	call _strcat ; cmd = nasm -f macho64 Sully_5.s & ld Sully_5.o -o Sully_5 -macosx_version_min 10.11 -lSystem
+
+	mov rdi, buffer
+	mov rsi, fwrite
+	call _fopen ; open file Sully_5.s
+
+	mov r12, rax
+	mov rdi, rax
+	mov rsi, str
+	mov rdx, str
+	call _fprintf ; print inside fd
+
+	mov rdi, r12
+	call _fclose
+
+	mov rdi, cmd
+	call _system ; compile next Sully 
 
 
-	lea rdi, [rel iden]
-	lea rsi, [rel nasmcmd]
+	mov rdi, run
+	mov rsi, runit
+	call _strcat ; run = ./
+
+	mov rdi, run
+	mov rsi, buffer
+	mov rdx, 7
+	call _strncat
+
+	mov rdi, run
+	call _execl
+
+	mov rdi, iden
+	mov rsi, run
+	call _printf
+
+	mov rdi, iden
+	mov rsi, buffer
+	call _printf
+
+	mov rdi, iden
+	mov rsi, cmd
 	call _printf
 
 
-	;mov rdi, r8
-	;call _execl
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	mov rdi, iden
+	mov rsi, ldcmdf
+	call _printf
+
+	mov rdi, iden
+	mov rsi, ldcmds
+	call _printf
+
+	mov rdi, iden
+	mov rsi, ldcmdt
+	call _printf
 end:
 	mov rsp, rbp
 	pop rbp

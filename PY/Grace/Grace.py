@@ -1,8 +1,11 @@
-#!/usr/local/bin/python3
-COUCOU = "COUCOU"
-AUREVOIR = "AUREVOIR"
-ADIEU = "ADIEU"
-def makeGrace():
-	return '#!/Users/etranchi/.brew/Cellar/python/3.7.3/bin/python3\nCOUCOU = "COUCOU"\nAUREVOIR = "AUREVOIR"\nADIEU = "ADIEU"\ndef makeGrace():\n\treturn %r\nfp = open("Grace_kid.py","w+")\nfp.write(makeGrace()%%makeGrace())'
-fp = open("Grace_kid.py","w+")
-fp.write(makeGrace()%makeGrace())
+#!/Users/etranchi/.brew/Cellar/python/3.7.3/bin/python3
+def grace():
+	COUCOU = "COUCOU"
+	AUREVOIR = "AUREVOIR"
+	def makeGrace():
+		return '#!/Users/etranchi/.brew/Cellar/python/3.7.3/bin/python3\ndef grace():\n\tCOUCOU = "COUCOU"\n\tAUREVOIR = "AUREVOIR"\n\tdef makeGrace():\n\t\treturn %r\n\tfp = open("Grace_kid.py","w+")\n\tfp.write(makeGrace()%%makeGrace())\nx = grace\nif __name__ == "__main__":\n\tx()\n'
+	fp = open("Grace_kid.py","w+")
+	fp.write(makeGrace()%makeGrace())
+x = grace
+if __name__ == "__main__":
+	x()
